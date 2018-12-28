@@ -4,43 +4,60 @@ body {
     font-family: sans-serif;
 }
 
-.search {
-    z-index: 1;
-    position: fixed;
-    top: 5px;
-    left: 5px;
-}
-
 .search-field {
-    width: 355px;
+    width: 306px;
     padding: 5px;
 }
 
 ul {
-    background: white;
-    border: 1px solid darkgrey;
-    overflow: auto;
     padding: 0px;
-    margin: 0;
-    max-height: 200px;
-    overflow: auto;
 }
 
-.box {
+li {
+    list-style-type: none;
+    margin: 2px;
+}
+
+li:hover{
     cursor: pointer;
-    padding: 5px;
 }
 
-.box:hover {
-    background-color: #269abc;
-    color: white;
+
+/********** Menu Burger *********/
+
+.bm-burger-bars {
+    background:black;
+}
+  
+.bm-cross-button {
+  height: 24px;
+  width: 24px;
+  padding: 15px;
+  margin-right: 10px;
+  margin-bottom: 2px;
 }
 
-.button {
-    text-align: center;
-    padding: 5px;
-    background-color: white;
-    border: 1px darkgrey solid;
-    cursor: pointer;
-    width: 369px;
+  
+.bm-menu {
+  padding-top: 100px;
+  background: white;
+  font-size: 1.1em;
+}
+
+.bm-item-list {
+  margin: auto;
+  text-align: center;
+}
+
+.bm-burger-button {
+    position: fixed;
+    width: 36px;
+    height: 30px;
+    left: 36px;
+    top: 2vh;
+    margin-right: 5px;
+}
+
+.bm-cross {
+    background: #bdc3c7;
 }

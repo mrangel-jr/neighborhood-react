@@ -2,45 +2,40 @@ import React, {Component} from  'react';
 
 /*Data*/
 import locations from '../data/locations';
-import LocationList from './LocationList';
+import MenuComponent from './MenuComponent';
 
 class App extends Component {
-    /**
-     * Constructor
-     */
     constructor(props) {
         super(props);
+        this.state = {
+            'map': '',
+            'infowindow': '',
+            'prevmarker': ''
+        };
         this.state = locations;
 
-        // retain object instance when used in the function
         this.initMap = this.initMap.bind(this);
         this.openInfoWindow = this.openInfoWindow.bind(this);
         this.closeInfoWindow = this.closeInfoWindow.bind(this);
     }
 
     componentDidMount() {
-        // Connect the initMap() function within this class to the global window context,
-        // so Google Maps can invoke it
         window.initMap = this.initMap;
-        // Asynchronously load the Google Maps script, passing in the callback reference
-        const key = 'AIzaSyAmrfzazLE5W-VYOa2HgWo-didikBcrwQ0'
+        const key = 'AIzaSyASkqDh-E3TRbx5yBsklZiym27Pq0ocRl8'
         loadMapJS(`https://maps.googleapis.com/maps/api/js?key=${key}&callback=initMap`)
     }
 
-    /**
-     * Initialise the map once the google map script is loaded
-     */
     initMap() {
-        var self = this;
+        const self = this;
 
-        var mapview = document.getElementById('map');
+        const mapview = document.getElementById('map');
         mapview.style.height = window.innerHeight + "px";
-        var map = new window.google.maps.Map(mapview, {
+        const map = new window.google.maps.Map(mapview, {
             zoom: 13,
             mapTypeControl: false
         });
 
-        var InfoWindow = new window.google.maps.InfoWindow({});
+        const InfoWindow = new window.google.maps.InfoWindow({});
 
         window.google.maps.event.addListener(InfoWindow, 'closeclick', function () {
             self.closeInfoWindow();
@@ -50,11 +45,11 @@ class App extends Component {
             self.closeInfoWindow();
         });
 
-        var alllocations = [];
+        const locations = [];
         const bounds = new google.maps.LatLngBounds();
-        this.state.alllocations.forEach(function (location) {
-            var longname = location.name + ' - ' + location.type;
-            var marker = new window.google.maps.Marker({
+        this.state.locations.forEach(function (location) {
+            const longname = location.name + ' - ' + location.type;
+            const marker = new window.google.maps.Marker({
                 position: new window.google.maps.LatLng(location.latitude, location.longitude),
                 animation: window.google.maps.Animation.DROP,
                 map: map
@@ -68,21 +63,18 @@ class App extends Component {
             location.longname = longname;
             location.marker = marker;
             location.display = true;
-            alllocations.push(location);
+            locations.push(location);
         });
 
         map.fitBounds(bounds);
         this.setState({
             'map': map,
             'infowindow': InfoWindow,
-            'alllocations': alllocations
+            'locations': locations
         });
     }
 
-    /**
-     * Open the infowindow for the marker
-     * @param {object} location marker
-     */
+
     openInfoWindow(marker) {
         this.closeInfoWindow();
         this.state.infowindow.open(this.state.map, marker);
@@ -96,16 +88,11 @@ class App extends Component {
         this.getMarkerInfo(marker);
     }
 
-    /**
-     * Retrive the location data from the foursquare api for the marker and display it in the infowindow
-     * @param {object} location marker
-     */
     getMarkerInfo(marker) {
-        var self = this;
+        const self = this;
         const clientId = "FEEPSNRZDA31RUDURQTJJHOGEBY5IFV2IPNVIIN53HJH4JDR";
         const clientSecret = "2F5S1U10ZCQSNB1HZYXPCRDLTPUSUUB112YVOKTKCIDFLSP4";
         const url = "https://api.foursquare.com/v2/venues/search?client_id=" + clientId + "&client_secret=" + clientSecret + "&v=20181228&ll=" + marker.getPosition().lat() + "," + marker.getPosition().lng() + "&limit=1";
-        console.log(url);
         fetch(url)
             .then(
                 function (response) {
@@ -114,7 +101,6 @@ class App extends Component {
                         return;
                     }
 
-                    // Examine the text in the response
                     response.json().then(function (data) {
                         const location_data = data.response.venues[0];
                         const name = `Local:  <strong>${location_data.name}</strong> <br>`;
@@ -131,10 +117,6 @@ class App extends Component {
             });
     }
 
-    /**
-     * Close the infowindow for the marker
-     * @param {object} location marker
-     */
     closeInfoWindow() {
         if (this.state.prevmarker) {
             this.state.prevmarker.setAnimation(null);
@@ -145,33 +127,31 @@ class App extends Component {
         this.state.infowindow.close();
     }
 
-    /**
-     * Render function of App
-     */
     render() {
         return (
-            <div>
-                <LocationList key="100" alllocations={this.state.alllocations} openInfoWindow={this.openInfoWindow}
-                              closeInfoWindow={this.closeInfoWindow}/>
-                <div id="map"></div>
-            </div>
+            <main>
+                <div id="container" aria-label="Menu">
+                    <MenuComponent key="100" 
+                        locations={this.state.locations}
+                        openInfoWindow={this.openInfoWindow}
+                        closeInfoWindow={this.closeInfoWindow}/>
+                </div>
+                <div id="map" aria-label="Map" role="application">
+                </div>
+            </main>
         );
     }
 }
 
 export default App;
 
-/**
- * Load the google maps Asynchronously
- * @param {url} url of the google maps script
- */
 function loadMapJS(src) {
     var ref = window.document.getElementsByTagName("script")[0];
     var script = window.document.createElement("script");
     script.src = src;
     script.async = true;
     script.onerror = function () {
-        document.write("Google Maps can't be loaded");
+        documsent.write("Google Maps can't be loaded");
     };
     ref.parentNode.insertBefore(script, ref);
 }

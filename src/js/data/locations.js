@@ -1,5 +1,5 @@
 const locations = {
-    'alllocations': [
+    'locations': [
         {
             'name': "Hospital Escola Álvaro Alvim",
             'type': "Hospital",
@@ -70,10 +70,7 @@ const locations = {
             'longitude': -41.332821,
             'streetAddress': "Av. Vinte e Oito de Março, 574, Centro"
         }
-    ],
-    'map': '',
-    'infowindow': '',
-    'prevmarker': ''
+    ]
 };
 
 export default locations;
