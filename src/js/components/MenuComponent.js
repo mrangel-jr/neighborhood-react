@@ -57,9 +57,6 @@ class MenuComponent extends Component {
 
   
   render () {
-    // const locationlist =
-
-      
     return (
       <Menu width={ '25%' } isOpen noOverlay >
         <div >
